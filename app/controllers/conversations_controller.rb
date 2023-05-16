@@ -32,9 +32,6 @@ class ConversationsController < ApplicationController
             }
             @res.push(ret_data)
         end
-        # TODO : query message terakhir pakai id convo diatas
-        # TODO : Unread count explore tambah field unread count user1 & user2 di convo model, bikin post route message, set integer message convo
-
         json_response(@res)
     end
 
