@@ -9,7 +9,7 @@ class ConversationsController < ApplicationController
         for i in @convo do
             convo_id = i.id
             convo_partner = User.find(i.user2_id)
-            msg = MessageStuff.where(conversation_id: convo_id).last
+            msg = Message.where(conversation_id: convo_id).last
             with_user = { 
                 'id' => convo_partner.id,
                 'name' => convo_partner.name,
