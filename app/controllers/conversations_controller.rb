@@ -9,12 +9,20 @@ class ConversationsController < ApplicationController
         for i in @convo do
             convo_id = i.id
             convo_partner = User.find(i.user2_id)
-            with_user = {
+            msg = MessageStuff.where(conversation_id: convo_id).last
+            with_user = { 
                 'id' => convo_partner.id,
                 'name' => convo_partner.name,
                 'photo_url' => convo_partner.photo_url
             }
-            last_message = {} # TODO
+            last_message = {
+                'id' => msg.id,
+                'sender' => {
+                    'id' => msg.sender.id,
+                    'name' => msg.sender.name
+                },
+                'sent_at' => msg.created_at
+            } # TODO
             unread_count = i.user1_unread_count
             ret_data = {
                 "id" => i.id,
