@@ -22,7 +22,7 @@ class ConversationsController < ApplicationController
                     'name' => msg.sender.name
                 },
                 'sent_at' => msg.created_at
-            } # TODO
+            } 
             unread_count = i.user1_unread_count
             ret_data = {
                 "id" => i.id,
@@ -40,7 +40,13 @@ class ConversationsController < ApplicationController
         authorizer = AuthorizeApiRequest.new(request.headers)
         res = authorizer.call
         user_logon = res[:user]
-        convo = Conversation.find(params[:id])
+        convo = Conversation.find_by(id: params[:id])
+        if convo == nil
+            return head :not_found
+        end
+        if user_logon.id != params[:id]
+            return head :forbidden
+        end
         if user_logon.id == convo.user1_id
             convo_partner = User.find(convo.user2_id)
         else
