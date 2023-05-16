@@ -16,6 +16,8 @@ ActiveRecord::Schema.define(version: 2023_05_15_123948) do
   enable_extension "plpgsql"
 
   create_table "conversations", force: :cascade do |t|
+    t.integer "user1_unread_count", default: 0
+    t.integer "user2_unread_count", default: 0
     t.bigint "user1_id", null: false
     t.bigint "user2_id", null: false
     t.datetime "created_at", precision: 6, null: false
