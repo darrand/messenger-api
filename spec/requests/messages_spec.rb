@@ -9,8 +9,15 @@ RSpec.describe 'Messages API', type: :request do
   let(:samid_headers) { valid_headers(samid) }
 
   # TODO: create conversation between Dimas and Agus, then set convo_id variable
-
+  
   describe 'get list of messages' do
+    let!(:convo_example) { create(:conversation, user1: dimas, user2:samid) }
+    let!(:message_example) { create(:message, sender: dimas, conversation: convo_example) }
+    let!(:message_example1) { create(:message, sender: dimas, conversation: convo_example) }
+    let!(:message_example2) { create(:message, sender: dimas, conversation: convo_example) }
+    let!(:message_example3) { create(:message, sender: dimas, conversation: convo_example) }
+    let!(:message_example4) { create(:message, sender: dimas, conversation: convo_example) }
+    convo_id = :convo_example
     context 'when user have conversation with other user' do
       before { get "/conversations/#{convo_id}/messages", params: {}, headers: dimas_headers }
 
@@ -34,6 +41,13 @@ RSpec.describe 'Messages API', type: :request do
 
     context 'when user try to access conversation not belong to him' do
       # TODO: create conversation and set convo_id variable
+      let!(:convo_example) { create(:conversation, user1: dimas, user2:samid) }
+      let!(:message_example) { create(:message, sender: dimas, conversation: convo_example) }
+      let!(:message_example1) { create(:message, sender: dimas, conversation: convo_example) }
+      let!(:message_example2) { create(:message, sender: dimas, conversation: convo_example) }
+      let!(:message_example3) { create(:message, sender: dimas, conversation: convo_example) }
+      let!(:message_example4) { create(:message, sender: dimas, conversation: convo_example) }
+
       before { get "/conversations/#{convo_id}/messages", params: {}, headers: samid_headers }
 
       it 'returns error 403' do

@@ -15,6 +15,7 @@ module RequestSpecHelper
       e.message << "\n#{JSON.pretty_generate(response_body)}"
       raise e
     end
+    puts(response_body)
     expect(response_body).to be_json_type(json) if json
   end
 end

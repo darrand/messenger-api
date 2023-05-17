@@ -22,9 +22,19 @@ RSpec.describe 'Conversations API', type: :request do
 
     context 'when user have conversations' do
       # TODOS: Populate database with conversation of current user
+      let!(:convo_example) { create(:conversation, user1: dimas, user2:samid) }
+      let!(:convo_example1) { create(:conversation, user1: dimas, user2:samid) }
+      let!(:convo_example2) { create(:conversation, user1: dimas, user2:samid) }
+      let!(:convo_example3) { create(:conversation, user1: dimas, user2:samid) }
+      let!(:convo_example4) { create(:conversation, user1: dimas, user2:samid) }
 
+      let!(:message_example) { create(:message, sender: dimas, conversation: convo_example) }
+      let!(:message_example1) { create(:message, sender: dimas, conversation: convo_example1) }
+      let!(:message_example2) { create(:message, sender: dimas, conversation: convo_example2) }
+      let!(:message_example3) { create(:message, sender: dimas, conversation: convo_example3) }
+      let!(:message_example4) { create(:message, sender: dimas, conversation: convo_example4) }
       before { get '/conversations', params: {}, headers: dimas_headers }
-
+      # Todo: message
       it 'returns list conversations of current user' do
         # Note `response_data` is a custom helper
         # to get data from parsed JSON responses in spec/support/request_spec_helper.rb
@@ -61,9 +71,13 @@ RSpec.describe 'Conversations API', type: :request do
   end
 
   describe 'GET /conversations/:id' do
+   
     context 'when the record exists' do
       # TODO: create conversation of dimas
-      before { get "/conversations/#{convo_id}", params: {}, headers: dimas_headers }
+      let!(:convo) { create(:conversation, user1: dimas, user2:samid) }
+      let!(:message_example) { create(:message, sender: dimas, conversation: convo) }
+
+      before { get "/conversations/#{convo.id}", params: {}, headers: dimas_headers }
 
       it 'returns conversation detail' do
         expect_response(
@@ -81,7 +95,9 @@ RSpec.describe 'Conversations API', type: :request do
     end
 
     context 'when current user access other user conversation' do
-      before { get "/conversations/#{convo_id}", params: {}, headers: samid_headers }
+      let!(:convo) { create(:conversation, user1: dimas, user2:samid) }
+      let!(:message_example) { create(:message, sender: dimas, conversation: convo) }
+      before { get "/conversations/#{convo.id}", params: {}, headers: samid_headers }
 
       it 'returns status code 403' do
         expect(response).to have_http_status(403)

@@ -8,7 +8,7 @@ class ConversationsController < ApplicationController
         @res = []
         for i in @convo do
             convo_id = i.id
-            convo_partner = User.find(i.user2_id)
+            convo_partner = User.find_by(id: i.user2.id)
             msg = Message.where(conversation_id: convo_id).last
             with_user = { 
                 'id' => convo_partner.id,
@@ -48,9 +48,9 @@ class ConversationsController < ApplicationController
             return head :forbidden
         end
         if user_logon.id == convo.user1_id
-            convo_partner = User.find(convo.user2_id)
+            convo_partner = User.find_by(id: convo.user2.id)
         else
-            convo_partner = User.find(convo.user1_id)
+            convo_partner = User.find_by(id: convo.user1.id)
         end
         @res = {
             "id" => convo.id,
